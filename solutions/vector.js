@@ -30,12 +30,43 @@ class Vector {
     this.size++;
   }
 
+  pop() {
+    if (this.isEmpty()) throw new Error('Cannot pop empty vector.');
+    let toPop = this.vector[--this.size];
+
+    let quarter = Math.floor(this.capacity / 4);
+    if (this.size <= quarter) {
+      this._contract(Math.floor(this.capacity / 2));
+    }
+
+    return toPop;
+  }
+
   _expand(newCapacity) {
+    if (newCapacity < this.capacity) {
+      throw new Error('New capacity must be greater than current capacity');
+    }
+
     let newArray = [];
 
-    if (newCapacity < this.capacity) {
-      throw new Error('New capacity must be greater than current capacity')
+    for (let i = 0; i < newCapacity; i++) {
+      if (i < this.size) {
+        newArray[i] = this.vector[i];
+      } else {
+        newArray[i] = null;
+      }
     }
+
+    this.vector = newArray;
+    this.capacity = newCapacity;
+  }
+
+  _contract(newCapacity) {
+    if (newCapacity <= this.size) {
+      throw new Error('New capacity much be greater than the current size');
+    }
+
+    let newArray = [];
 
     for (let i = 0; i < newCapacity; i++) {
       if (i < this.size) {
@@ -56,3 +87,8 @@ client.push('test2');
 client.push('third');
 client.push('fourth');
 client.push('fifth');
+console.log(client.pop());
+console.log(client.pop());
+console.log(client.pop());
+console.log(client.pop());
+console.log(client.pop());
