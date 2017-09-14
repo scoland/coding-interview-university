@@ -42,6 +42,23 @@ class Vector {
     return toPop;
   }
 
+  insert(index, item) {
+    let newVector = [];
+
+    for (let i = 0; i < this.capacity; i++) {
+        if (i < index) {
+            newVector[i] = this.vector[i];
+        } else if (i === index) {
+          newVector[i] = item;
+        } else {
+          newVector.push(this.vector[i - 1]);
+        }
+    }
+
+    this.vector = newVector;
+    this.size = size++;
+  }
+
   _expand(newCapacity) {
     if (newCapacity < this.capacity) {
       throw new Error('New capacity must be greater than current capacity');
