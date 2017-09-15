@@ -39,6 +39,35 @@ class Hash {
 
     this.table[index] = [key, value];
   }
+
+  exists(key) {
+    // Here we only care about undefined buckets, null buckets we skip
+    let index = this.hash(key, this.m);
+    let firstIndex = index;
+    while (this.table[index] !== undefined) {
+      if (this.table[index] && (this.table[index][0] === key)) {
+        return index;
+      }
+      index = (index + 1) % this.m;
+      if (index === firstIndex) return false;
+    }
+
+    return false;
+  }
+
+  remove(key) {
+    if (this.exists(key) === false) {
+      throw new Error('Key to remove not found in table');
+    }
+
+    let index = this.hash(key, this.m);
+
+    while (this.table[index][0] !== key) {
+      index = (index + 1) % this.m;
+    }
+
+    this.table[index] = null;
+  }
 }
 
 const hash = new Hash(3);
@@ -46,5 +75,5 @@ hash.add('abc', 'test');
 hash.add('abc', 'dingus');
 hash.add('cab', 'test');
 hash.add('asldkfj', 'please');
-hash.add('new', 'isfull');
+hash.remove('cab');
 console.dir(hash.table);
